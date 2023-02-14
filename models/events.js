@@ -34,6 +34,14 @@ class Event {
         return response.rows.map((g) => new Event(g));
     }
 
+    static async getUserEvents(user) {
+        const response = await db.query(
+            "SELECT * FROM events WHERE user_id = $1 ORDER BY event_id DESC;",
+            [user.id]
+        );
+        return response.rows.map((g) => new Event(g));
+    }
+
     static async getOneById(id) {
         const response = await db.query(
             "SELECT * FROM events WHERE event_id = $1",
