@@ -5,7 +5,7 @@ const authenticator = require("../middleware/authenticator");
 
 const eventsRouter = Router();
 
-eventsRouter.get("/", eventsController.index);
+eventsRouter.get("/", authenticator, eventsController.index);
 eventsRouter.get("/:id", eventsController.show);
 eventsRouter.get("/search/:string", eventsController.search);
 eventsRouter.post("/", eventsController.create);

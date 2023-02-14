@@ -43,6 +43,11 @@ class Event {
         return new Event(response.rows[0]);
     }
 
+    static async search(string) {
+        const response = await db.query("SELECT * FROM events WHERE event_title ILIKE '%' || $1 || '%' OR event_description ILIKE '%' || $1 || '%';", [string]);
+        return response.rows.map(g => new Event(g));
+    }
+
     static async create(data) {
         const {
             event_title,
