@@ -35,6 +35,7 @@ CREATE TABLE events (
     interest INT DEFAULT 0,
     attending INT DEFAULT 0,
     category_id VARCHAR(20) NOT NULL,
+    image_url VARCHAR(100),
     location VARCHAR(100) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user_account("user_id"),
     FOREIGN KEY (category_id) REFERENCES categories("category_id")
