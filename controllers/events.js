@@ -2,6 +2,8 @@ const Event = require("../models/events");
 const Token = require("../models/token");
 const User = require("../models/users");
 
+const uploadFile = require("./fileUploader");
+
 async function index(req, res) {
     try {
         const events = await Event.getAll();
@@ -46,6 +48,11 @@ async function search(req, res) {
 async function create(req, res) {
     try {
         const data = req.body;
+        const file = req.file;
+        const response = await uploadFile(file);
+        if (response.secure_url) {
+            data.image_url = response.secure_url;
+        }
         const token = data.token;
         const tokenData = await Token.getOneByToken(token);
         data.user_id = tokenData.user_id;

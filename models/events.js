@@ -12,6 +12,7 @@ class Event {
         start_date,
         end_date,
         location,
+        image_url,
     }) {
         (this.id = event_id),
             (this.user_id = user_id),
@@ -23,6 +24,7 @@ class Event {
             (this.start_date = start_date),
             (this.end_date = end_date);
         this.location = location;
+        this.image_url = image_url;
     }
 
     static async getAll() {
@@ -52,9 +54,10 @@ class Event {
             start_date,
             end_date,
             location,
+            image_url,
         } = data;
         const response = await db.query(
-            "INSERT INTO events (event_title, user_id, event_description, category_id, start_date, end_date, location) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;",
+            "INSERT INTO events (event_title, user_id, event_description, category_id, start_date, end_date, location, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;",
             [
                 event_title,
                 user_id,
@@ -63,10 +66,11 @@ class Event {
                 start_date,
                 end_date,
                 location,
+                image_url,
             ]
         );
 
-        return response.rows.map((w) => new Event(w));
+        return new Event(response.rows[0]);
     }
 
     async interested() {
