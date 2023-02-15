@@ -7,9 +7,9 @@ const upload = require("../middleware/multer");
 
 const eventsRouter = Router();
 
-eventsRouter.get("/", eventsController.index);
+eventsRouter.get("/", authenticator, eventsController.index);
 eventsRouter.get("/:id", eventsController.show);
-eventsRouter.get("/search/:string", eventsController.search);
+eventsRouter.get("/search/:string", authenticator,eventsController.search);
 eventsRouter.post("/", upload.single("file"), eventsController.create);
 eventsRouter.patch("/interested/:id", eventsController.interested);
 eventsRouter.patch("/not_interested/:id", eventsController.not_interested);
