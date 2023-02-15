@@ -29,14 +29,14 @@ class Event {
 
     static async getAll() {
         const response = await db.query(
-            "SELECT * FROM events ORDER BY event_id DESC;"
+            "SELECT * FROM events ORDER BY interest ASC;"
         );
         return response.rows.map((g) => new Event(g));
     }
 
     static async getUserEvents(user) {
         const response = await db.query(
-            "SELECT * FROM events WHERE user_id = $1 ORDER BY event_id DESC;",
+            "SELECT * FROM events WHERE user_id = $1 ORDER BY interest ASC;",
             [user.id]
         );
         return response.rows.map((g) => new Event(g));
