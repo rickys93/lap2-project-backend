@@ -110,8 +110,8 @@ async function not_attending(req, res) {
 async function destroy(req, res) {
     try {
         const id = parseInt(req.params.id);
-        const events = await Event.getOneById(id);
-        const result = await events.destroy();
+        const event = await Event.getOneById(id);
+        const result = await event.destroy();
         res.status(200).json(result);
     } catch (err) {
         res.status(404).json({ error: err.message });
