@@ -9,13 +9,12 @@ async function register(req, res) {
         const data = req.body;
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(data.password, salt);
-        const user = await User.getOneByUsername(data.username);
-        if (user) {
-            throw new Error("Username already taken");
+        if (await User.usernameTaken(data.username)) {
+            throw new Error("Username already taken.");
         }
 
         const result = await User.create({ ...data, password: hashedPassword });
-        res.status(201).send(result);
+        return res.status(201).json({ message: "Register successful!" });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -25,6 +24,12 @@ async function login(req, res) {
     try {
         const data = req.body;
         const user = await User.getOneByUsername(data.username);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found!",
+            });
+        }
         const authenticated = await bcrypt.compare(
             data.password,
             user.password

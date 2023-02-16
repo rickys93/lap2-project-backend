@@ -29,14 +29,14 @@ class Event {
 
     static async getAll() {
         const response = await db.query(
-            "SELECT * FROM events ORDER BY interest ASC;"
+            "SELECT * FROM events ORDER BY interest DESC;"
         );
         return response.rows.map((g) => new Event(g));
     }
 
     static async getUserEvents(user) {
         const response = await db.query(
-            "SELECT * FROM events WHERE user_id = $1 ORDER BY interest ASC;",
+            "SELECT * FROM events WHERE user_id = $1 ORDER BY interest DESC;",
             [user.id]
         );
         return response.rows.map((g) => new Event(g));
@@ -54,8 +54,11 @@ class Event {
     }
 
     static async search(string) {
-        const response = await db.query("SELECT * FROM events WHERE event_title ILIKE '%' || $1 || '%' OR event_description ILIKE '%' || $1 || '%';", [string]);
-        return response.rows.map(g => new Event(g));
+        const response = await db.query(
+            "SELECT * FROM events WHERE event_title ILIKE '%' || $1 || '%' OR event_description ILIKE '%' || $1 || '%';",
+            [string]
+        );
+        return response.rows.map((g) => new Event(g));
     }
 
     static async create(data) {
