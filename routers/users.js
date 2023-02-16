@@ -9,5 +9,6 @@ userRouter.get("/authorize", authenticator, userController.authorize);
 userRouter.get("/events", authenticator, userController.events);
 userRouter.post("/register", userController.register);
 userRouter.post("/login", userController.login);
+userRouter.post("/logout", authenticator, userController.logout);
 
 module.exports = userRouter;

@@ -9,6 +9,11 @@ async function register(req, res) {
         const data = req.body;
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(data.password, salt);
+        const user = await User.getOneByUsername(data.username);
+        if (user) {
+            throw new Error("Username already taken");
+        }
+
         const result = await User.create({ ...data, password: hashedPassword });
         res.status(201).send(result);
     } catch (error) {
@@ -30,6 +35,26 @@ async function login(req, res) {
             const token = await Token.create(user["id"]);
             res.status(200).json({ authenticated: true, token: token.token });
         }
+    } catch (error) {
+        res.status(403).json({ error: error.message });
+    }
+}
+
+async function logout(req, res) {
+    try {
+        const userToken = req.headers["authorization"];
+
+        const validToken = await Token.getOneByToken(userToken);
+
+        if (!validToken) {
+            return res.status(404);
+        }
+
+        validToken.destroy();
+
+        return res.status(204).json({
+            message: "User signed out.",
+        });
     } catch (error) {
         res.status(403).json({ error: error.message });
     }
@@ -83,6 +108,7 @@ async function events(req, res) {
 module.exports = {
     register,
     login,
+    logout,
     authorize,
     events,
 };
