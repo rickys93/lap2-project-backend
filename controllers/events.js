@@ -2,7 +2,7 @@ const Event = require("../models/events");
 const Token = require("../models/token");
 const User = require("../models/users");
 
-const uploadFile = require("./fileUploader");
+const uploadFile = require("../middleware/fileUploader");
 
 async function index(req, res) {
     try {
@@ -46,11 +46,15 @@ async function search(req, res) {
 async function create(req, res) {
     try {
         const data = req.body;
+        // get file and upload to cloudinary
         const file = req.file;
-        const response = await uploadFile(file);
-        if (response.secure_url) {
-            data.image_url = response.secure_url;
+        if (file) {
+            const response = await uploadFile(file);
+            if (response.secure_url) {
+                data.image_url = response.secure_url;
+            }
         }
+        // get user account from token so we can add username to response
         const token = data.token;
         const tokenData = await Token.getOneByToken(token);
         data.user_id = tokenData.user_id;

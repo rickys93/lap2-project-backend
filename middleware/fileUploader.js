@@ -1,15 +1,14 @@
 const cloudinary = require("cloudinary").v2;
 
-// Configure Cloudinary with your account credentials
+// Configure cloudinary with account credentials
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// const formData = new FormData();
-// formData.append("file", file);
 async function uploadFile(file) {
+    // Make sure file is image
     if (!file.mimetype.includes("image")) {
         return { success: false, error: "File type not image" };
     }
