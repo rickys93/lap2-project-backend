@@ -54,6 +54,13 @@ INSERT INTO categories (
 ('family', 'Family and Kids'),
 ('business', 'Business and Networking');
 
+INSERT INTO user_account (
+    username,
+    password
+) VALUES (
+    'Rickys93',
+    'password'
+);
 
 INSERT INTO events (
 user_id,
