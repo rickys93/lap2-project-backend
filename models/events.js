@@ -12,6 +12,7 @@ class Event {
         start_date,
         end_date,
         location,
+        image_url,
     }) {
         (this.id = event_id),
             (this.user_id = user_id),
@@ -23,11 +24,20 @@ class Event {
             (this.start_date = start_date),
             (this.end_date = end_date);
         this.location = location;
+        this.image_url = image_url;
     }
 
     static async getAll() {
         const response = await db.query(
-            "SELECT * FROM events ORDER BY event_id DESC;"
+            "SELECT * FROM events ORDER BY interest DESC, attending DESC;"
+        );
+        return response.rows.map((g) => new Event(g));
+    }
+
+    static async getUserEvents(user) {
+        const response = await db.query(
+            "SELECT * FROM events WHERE user_id = $1 ORDER BY interest DESC, attending DESC;",
+            [user.id]
         );
         return response.rows.map((g) => new Event(g));
     }
@@ -43,6 +53,14 @@ class Event {
         return new Event(response.rows[0]);
     }
 
+    static async search(string) {
+        const response = await db.query(
+            "SELECT * FROM events WHERE event_title ILIKE '%' || $1 || '%' OR event_description ILIKE '%' || $1 || '%';",
+            [string]
+        );
+        return response.rows.map((g) => new Event(g));
+    }
+
     static async create(data) {
         const {
             event_title,
@@ -52,9 +70,10 @@ class Event {
             start_date,
             end_date,
             location,
+            image_url,
         } = data;
         const response = await db.query(
-            "INSERT INTO events (event_title, user_id, event_description, category_id, start_date, end_date, location) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;",
+            "INSERT INTO events (event_title, user_id, event_description, category_id, start_date, end_date, location, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;",
             [
                 event_title,
                 user_id,
@@ -63,10 +82,11 @@ class Event {
                 start_date,
                 end_date,
                 location,
+                image_url,
             ]
         );
 
-        return response.rows.map((w) => new Event(w));
+        return new Event(response.rows[0]);
     }
 
     async interested() {

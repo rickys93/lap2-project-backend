@@ -1,9 +1,9 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-const logRoutes = require('./middleware/logger');
-const userRouter = require('./routers/users');
-const eventsRouter = require('./routers/events');
+const logRoutes = require("./middleware/logger");
+const userRouter = require("./routers/users");
+const eventsRouter = require("./routers/events");
 
 const api = express();
 
@@ -13,9 +13,9 @@ api.use(logRoutes);
 
 api.get("/", (req, res) => {
     res.json({
-        description: "It works :)"
-    })
-})
+        description: "Welcome to the Florin County Council API!",
+    });
+});
 
 api.use("/users", userRouter);
 api.use("/events", eventsRouter);
