@@ -67,4 +67,3 @@ Use an API testing platform such as Hoppscotch or Postman to test the API.
 Please note that there may be some bugs in the project, including the following:
 
 1. More error handling may be needed.
-2. Tests could be implemented to improve the project further.
