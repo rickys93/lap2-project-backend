@@ -16,6 +16,9 @@ Add the following lines to the file:
 ```bash
 PORT=3000
 DB_URL=postgres://<db-username>:<db-password>@<hostname>/<db-name>
+CLOUD_NAME=<cloud-name>
+CLOUDINARY_API_KEY=<cloudinary-api-key>
+CLOUDINARY_API_SECRET=<cloudinary-api-secret>
 ```
 Replace the placeholders of DB_URL with the appropriate values.
 
@@ -58,7 +61,7 @@ The API has the following routes and functionalities:
 - /login POST Accepts a JSON object containing the user's credentials and logs the user in.
 - /logout POST Logs the user out. The user must be authenticated to access this endpoint.
 
-Use an API testing platform such as Hoppscotch, Postman or Insomnia to test the API.
+Use an API testing platform such as Hoppscotch or Postman to test the API.
 
 ## Known Bugs
 Please note that there may be some bugs in the project, including the following:
